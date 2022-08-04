@@ -24,7 +24,7 @@ def change_input_visual(lst_guess: List, tried: str) -> str:
 
 def select_random_word() -> str:
     fl = open("words_bank.txt", "r")
-    rand = randint(0, 19)
+    rand = randint(0, 51)
     words = fl.readlines()
     fl.close()
     return words[rand].rstrip()
