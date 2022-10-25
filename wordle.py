@@ -50,6 +50,7 @@ class Wordle:
         elif word_tried == self._word:
             self.win = True
             self.change_visual(word_tried)
+            self.print_visual()
         else:
             self.change_visual(word_tried)
             self.words_tried.add(word_tried)
@@ -90,20 +91,33 @@ class Wordle:
                 print("⬜", end=" |")
         print()
         print()
-        print(" | ".join(self.visual))
-        for i in range(len(self.visual)):
-            if self.visual[i] == self._word[i]:
-                print("🟩", end=" |") # Deberia ser un if self.word_tried[i] in self.word_letters
-            elif self.visual[i] == "🟨":
-                print("🟨", end=" |")
-            else:
-                print("⬜", end=" |")
-        print()
+        if self.win:
+            print(self._word, end=" | ")
+            print()
+        else:
+            print(" | ".join(self.visual))   # Podria llegar a eliminarse
+        if self.win:
+            for i in range(len(self.visual)):
+                print("🟩", end=" |")
+            print()
+        else:
+            for i in range(len(self.visual)):
+                if self.visual[i] == self._word[i]:
+                    print("🟩", end=" |") 
+                elif self.visual[i] == "🟨": # Deberia ser un if self.word_tried[i] in self.word_letters
+                    print("🟨", end=" |")
+                else:
+                    print("⬜", end=" |")
+            print()
+        self.reset_visual()
 
     # Missing function to reset the visual in each call of print_visual
 
     def reset_visual(self) -> None:
-        pass
+        """Resets the visual of the letters used, it changes the visual
+        to ["__"] * length of the word"""
+        self.visual = ["__"] * self._length
+        
 
 
 # Function that selects a random word from a file
@@ -122,23 +136,24 @@ def main():
     while wordle.win == False:
         print(f"You have tried {len(wordle.words_tried)} words")
         word_tried: str = input(
-            f"Try your guess of {wordle._length} letters:\n").upper()
-        while len(word_tried) != wordle._length:
+            f"Try your guess of {wordle.length} letters:\n").upper()
+        while len(word_tried) != wordle.length:
             os.system("clear")
             print("The guess must be of the same length")
             wordle.print_visual()
-            word_tried = input(
-                f"Try your guess of {wordle._length} letters:\n").upper()
+            word_tried = input(f"Try your guess of {wordle.length} " \
+                                "letters:\n").upper()
         wordle.compare_word(word_tried)
         os.system("clear")
         wordle.print_visual()
         for i in range(len(word_tried)):
             print(f"{word_tried[i]}", end=" | ")
         print()
-        # wordle.reset_visual()
     os.system("clear")
     wordle.print_visual()
-    print("You won")
+    for i in range(len(word_tried)):
+        print(f"{word_tried[i]}", end=" | ")
+    print("\nYou won")
 
 
 if __name__ == "__main__":
