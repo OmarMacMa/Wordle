@@ -159,7 +159,7 @@ def main():
     wordle.print_visual()
     for i in range(len(word_tried)):
         print(f"{word_tried[i]}", end=" | ")
-    print("\nYou won")
+    print(f"\nYou won after {len(wordle.words_tried)} tries")
 
 
 if __name__ == "__main__":
