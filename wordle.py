@@ -21,14 +21,15 @@ class Wordle:
         self._length: int = len(word)
         self.win: bool = False
         self.visual: List[str] = ["__"] * self._length
-        # Deberia ser un dict por letras repetidas
-        self.word_letters: Set[str] = set(word)
+        self.word_letters: Dict[str, int] = {}
+        for letter in self._word:
+            if letter in self.word_letters:
+                self.word_letters[letter] += 1
+            else:
+                self.word_letters[letter] = 1
         self.words_tried: Set[str] = set()
-        # Deberia ser un dict por letras repetidas
-        self.letters_green: Set[str] = set()
-        # Deberia ser un dict por letras repetidas
-        self.letters_yellow: Set[str] = set()
-        # Deberia ser un dict por letras repetidas
+        self.letters_green: Dict[str, int] = {}
+        self.letters_yellow: Dict[str, int] = {}
         self.letters_red: Set[str] = set()
 
     # Property to get the length of the word
@@ -64,9 +65,15 @@ class Wordle:
         for i in range(len(word_tried)):
             if self._word[i] == word_tried[i]:
                 self.visual[i] = word_tried[i]
-                self.letters_green.add(word_tried[i])
+                if word_tried[i] in self.letters_green:
+                    self.letters_green[word_tried[i]] += 1
+                else:
+                    self.letters_green[word_tried[i]] = 1
             elif word_tried[i] in self.word_letters:
-                self.letters_yellow.add(word_tried[i])
+                if word_tried[i] in self.letters_yellow:
+                    self.letters_yellow[word_tried[i]] += 1
+                else:
+                    self.letters_yellow[word_tried[i]] = 1
             else:
                 self.letters_red.add(word_tried[i])
 
@@ -91,20 +98,20 @@ class Wordle:
                 print("⬜", end=" |")
         print()
         print()
+        
         if self.win:
-            print(self._word, end=" | ")
+            for i in range(self._length):
+                print(self._word[i], end=" | ")
             print()
-        else:
-            print(" | ".join(self.visual))   # Podria llegar a eliminarse
-        if self.win:
             for i in range(len(self.visual)):
                 print("🟩", end=" |")
             print()
         else:
+            print(" | ".join(self.visual))   # Podria llegar a eliminarse
             for i in range(len(self.visual)):
                 if self.visual[i] == self._word[i]:
                     print("🟩", end=" |") 
-                elif self.visual[i] == "🟨": # Deberia ser un if self.word_tried[i] in self.word_letters
+                elif self.visual[i] == "🟨":
                     print("🟨", end=" |")
                 else:
                     print("⬜", end=" |")
@@ -117,7 +124,6 @@ class Wordle:
         """Resets the visual of the letters used, it changes the visual
         to ["__"] * length of the word"""
         self.visual = ["__"] * self._length
-        
 
 
 # Function that selects a random word from a file
@@ -132,7 +138,7 @@ def select_random_word() -> str:
 
 def main():
     word_to_guess: str = select_random_word()
-    wordle = Wordle(word_to_guess)
+    wordle: Wordle = Wordle(word_to_guess)
     while wordle.win == False:
         print(f"You have tried {len(wordle.words_tried)} words")
         word_tried: str = input(
