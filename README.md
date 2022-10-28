@@ -7,7 +7,12 @@ Words are chosen from the *words_bank.txt* file, from a bank of 52 words with a 
 
 Here is an example of a play:\
 \
-![Battery](./Images/battery_guess.png)
+![Soap](./Images/soap_guess.png)
+![Role](./Images/role_guess.png)
+![Mock](./Images/mock_guess.png)
+![Cone](./Images/cone_guess.png)
+![Corn](./Images/corn_guess.png)
+![Coin](./Images/coin_guess.png)
 
 Plans for the future:
 - Make the game accept only words from a *dictionary.txt* file.
