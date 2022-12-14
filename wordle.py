@@ -3,6 +3,8 @@ from random import randint
 from typing import Dict, List, Set
 
 
+
+
 class Wordle:
     # Constructor
     def __init__(self, word):
@@ -27,6 +29,10 @@ class Wordle:
                 self.word_letters[letter] += 1
             else:
                 self.word_letters[letter] = 1
+        self.dictionary_set: Set[str] = set()
+        with open("dictionary.txt") as fl:
+            for line in fl:
+                self.dictionary_set.add(line.rstrip().upper())
         self.words_tried: Set[str] = set()
         self.letters_green: Dict[str, int] = {}
         self.letters_yellow: Dict[str, int] = {}
@@ -48,11 +54,14 @@ class Wordle:
             print("You already tried this word")
         elif len(word_tried) != self._length:
             print("The word must be of the same length")
+        elif word_tried not in self.dictionary_set:
+            print("The word must be a real word")
         elif word_tried == self._word:
             self.win = True
             self.change_visual(word_tried)
             self.print_visual()
         else:
+            print("Here")
             self.change_visual(word_tried)
             self.words_tried.add(word_tried)
 
@@ -107,7 +116,7 @@ class Wordle:
                 print("🟩", end=" |")
             print()
         else:
-            print(" | ".join(self.visual))   # Podria llegar a eliminarse
+            print(" |".join(self.visual))   # Podria llegar a eliminarse
             for i in range(len(self.visual)):
                 if self.visual[i] == self._word[i]:
                     print("🟩", end=" |") 
@@ -150,7 +159,7 @@ def main():
             word_tried = input(f"Try your guess of {wordle.length} " \
                                 "letters:\n").upper()
         wordle.compare_word(word_tried)
-        os.system("clear")
+        # os.system("clear")
         wordle.print_visual()
         for i in range(len(word_tried)):
             print(f"{word_tried[i]}", end=" | ")
