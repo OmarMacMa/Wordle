@@ -15,8 +15,6 @@ Here is an example of a play:\
 ![Coin](./Images/coin_guess.png)
 
 Plans for the future:
-- Make the game accept only words from a *dictionary.txt* file.
-- Show the letters that have already been tried.
 - Add a limit of tries.
 - The user to choose the lenght of the playing word, as a difficulty level.
 
