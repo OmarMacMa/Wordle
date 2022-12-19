@@ -1,10 +1,8 @@
-import os
 from random import randint
 from typing import Dict, List, Set
 
 
-
-
+# Class Wordle
 class Wordle:
     # Constructor
     def __init__(self, word):
@@ -37,12 +35,17 @@ class Wordle:
         self.letters_green: Dict[str, int] = {}
         self.letters_yellow: Dict[str, int] = {}
         self.letters_red: Set[str] = set()
+        self._tries: int = 0
 
     # Property to get the length of the word
 
     @property
     def length(self):
         return self._length
+
+    # Property to get the tries
+    def tries(self):
+        return self._tries
 
     # Function that compares the word given by the user with the word to guess
 
@@ -61,7 +64,7 @@ class Wordle:
             self.change_visual(word_tried)
             self.print_visual()
         else:
-            print("Here")
+            self._tries += 1
             self.change_visual(word_tried)
             self.words_tried.add(word_tried)
 
@@ -116,7 +119,7 @@ class Wordle:
                 print("🟩", end=" |")
             print()
         else:
-            print(" |".join(self.visual))   # Podria llegar a eliminarse
+            print(" | ".join(self.visual))
             for i in range(len(self.visual)):
                 if self.visual[i] == self._word[i]:
                     print("🟩", end=" |") 
@@ -138,9 +141,18 @@ class Wordle:
 # Function that selects a random word from a file
 def select_random_word() -> str:
     """Function that selects a random word from the words_bank.txt file"""
-    fl = open("words_bank.txt", "r")
-    rand = randint(0, 51)
+    files_dict: Dict[int, str] = {
+        1: "four_letters_words.txt", 2: "five_letters_words.txt",
+        3: "six_letters_words.txt", 4: "seven_letters_words.txt",
+        5: "eight_letters_words.txt", 6: "nine_letters_words.txt",
+        7: "ten_letters_words.txt"
+    }
+    difficulty: int = int(input("Select the difficulty level (from 1 to 7): "))
+    if difficulty not in range(1, 8):
+        difficulty = 1
+    fl = open(files_dict[difficulty], "r")
     words = fl.readlines()
+    rand = randint(0, len(words) - 1)
     fl.close()
     return words[rand].rstrip()
 
@@ -148,12 +160,11 @@ def select_random_word() -> str:
 def main():
     word_to_guess: str = select_random_word()
     wordle: Wordle = Wordle(word_to_guess)
-    while wordle.win == False:
-        print(f"You have tried {len(wordle.words_tried)} words")
+    while wordle.win == False and wordle.tries() < 10:
+        print(f"You have tried {wordle.tries()} words")
         word_tried: str = input(
             f"Try your guess of {wordle.length} letters:\n").upper()
         while len(word_tried) != wordle.length:
-            os.system("clear")
             print("The guess must be of the same length")
             wordle.print_visual()
             word_tried = input(f"Try your guess of {wordle.length} " \
@@ -164,11 +175,13 @@ def main():
         for i in range(len(word_tried)):
             print(f"{word_tried[i]}", end=" | ")
         print()
-    os.system("clear")
     wordle.print_visual()
     for i in range(len(word_tried)):
-        print(f"{word_tried[i]}", end=" | ")
-    print(f"\nYou won after {len(wordle.words_tried)} tries")
+        print(f"{word_to_guess[i]}", end=" | ")
+    if wordle.win == False:
+        print("\nYou ran out of tries, you lost")
+    else:
+        print(f"\nYou won after {wordle.tries()} tries")
 
 
 if __name__ == "__main__":

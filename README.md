@@ -14,12 +14,15 @@ Here is an example of a play:\
 ![Corn](./Images/corn_guess.png)
 ![Coin](./Images/coin_guess.png)
 
-Plans for the future:
-- Add a limit of tries.
-- The user to choose the lenght of the playing word, as a difficulty level.
-
 This game is written in Python 3.8. The files needed to run the game are:
-- *words_bank.txt*
+- *dictionary.txt*
+- *four_letters_words.txt*
+- *five_letters_words.txt*
+- *six_letters_words.txt*
+- *seven_letters_words.txt*
+- *eight_letters_words.txt*
+- *nine_letters_words.txt*
+- *ten_letters_words.txt*
 - *wordle.py*
 
 And can be played by typing:
